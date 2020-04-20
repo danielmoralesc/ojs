@@ -25,107 +25,98 @@
  *}
 
 <article class="obj_article_details">
-	<div class="article_header_wrapper">
-		{* Notification that this is an old version *}
-		{if $currentPublication->getId() !== $publication->getId()}
-		<div class="cmp_notification notice" role="alert">
-			{capture assign="latestVersionUrl"}{url page="article" op="view" path=$article->getBestId()}{/capture}
-			{translate key="submission.outdatedVersion"
-				datePublished=$publication->getData('datePublished')|date_format:$dateFormatShort
-				urlRecentVersion=$latestVersionUrl|escape
-			}
-		</div>
-		{/if}
-
-		<div class="article_issue_credentials">
-			<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">{$issue->getIssueIdentification()|escape}</a>
-		</div>
-		<div class="article_section_title">
-			{$section->getLocalizedTitle()}
-		</div>
-		<div class="row">
-			<div class="col-md-8">
-
-				{* article title, subtitle and authors *}
-				<h1 class="page_title article-full-title">
-					{$publication->getLocalizedFullTitle()|escape}
-				</h1>
-
-
-			</div>
-
-			<div class="col-md-4">
-
-				{* Article Galleys *}
-				{if $primaryGalleys}
-					<div class="item galleys">
-						{foreach from=$primaryGalleys item=galley}
-							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley purchaseFee=$currentJournal->getSetting('purchaseArticleFee') purchaseCurrency=$currentJournal->getSetting('currency')}
-						{/foreach}
-					</div>
-				{/if}
-				{if $supplementaryGalleys}
-					<div class="item galleys">
-						{foreach from=$supplementaryGalleys item=galley}
-							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley isSupplementary="1"}
-						{/foreach}
-					</div>
-				{/if}
-
-			</div>
-
-			<div class="col-md-12">
-
-				{* authors list *}
-				{if $publication->getData('authors')}
-					<div class="authors_info">
-						<ul class="entry_authors_list">
-							{strip}
-								{foreach from=$publication->getData('authors') item=author key=authorNumber}
-									<li class="entry_author_block{if $authorNumber > 4} limit-for-mobiles{elseif $authorNumber === 4} fifth-author{/if}">
-										{if $author->getOrcid()}
-											<a class="orcid-image-url" href="{$author->getOrcid()}"><img src="{$baseUrl}/{$orcidImageUrl}"></a>
-										{/if}
-										<span class="name_wrapper">
-											{$author->getFullName()|escape}
-										</span>
-										{if $authorNumber+1 !== $publication->getData('authors')|@count}
-											<span class="author-delimiter">, </span>
-										{/if}
-									</li>
-								{/foreach}
-								{if $publication->getData('authors')|@count > 4}
-									<span class="collapse-authors" id="show-all-authors"><ion-icon name="add-circle"></ion-icon></span>
-									<span class="collapse-authors hide" id="hide-authors"><ion-icon name="remove-circle"></ion-icon></ion-icon></span>
-								{/if}
-							{/strip}
-						</ul>
-					</div>
-					<div class="additional-authors-info">
-						{if $boolAuthorInfo}
-							<a class="more-authors-info-button" id="collapseButton" data-toggle="collapse" href="#authorInfoCollapse" role="button" aria-expanded="false" aria-controls="authorInfoCollapse">
-								<ion-icon name="add" class="ion_icon" id="more-authors-data-symbol"></ion-icon>
-								<ion-icon name="remove" class="ion_icon hide" id="less-authors-data-symbol"></ion-icon>
-								<span class="ion-icon-text">{translate key="plugins.themes.classic.more-info"}</span>
+	{* Issue introduction area above articles *}
+	{if $issue->hasDescription() || $issue->getLocalizedCoverImageUrl()}
+		<div class="issue_heading issue-browse-left-nav page-column page-column--left js-left-nav-col">
+			<div class="flex_container description_cover">
+				{* Article/Issue cover image *}
+				{if $publication->getLocalizedData('coverImage') || $issue->getLocalizedCoverImage()}
+					<div class="issue_cover_block">
+						{if $publication->getLocalizedData('coverImage')}
+							{assign var="coverImage" value=$publication->getLocalizedData('coverImage')}
+							<img
+								class="cover_image"
+								src="{$publication->getLocalizedCoverImageUrl($article->getData('contextId'))|escape}"
+								alt="{$coverImage.altText|escape|default:''}"
+							>
+						{else}
+							<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">
+								<img
+									class="cover_image"
+									src="{$issue->getLocalizedCoverImageUrl()|escape}"
+									alt="{$issue->getLocalizedCoverImageAltText()|escape|default:''}"
+								>
 							</a>
 						{/if}
-						<div class="collapse" id="authorInfoCollapse">
-							{foreach from=$publication->getData('authors') item=author key=number}
-								<div class="additional-author-block">
-									{if $author->getLocalizedAffiliation() || $author->getLocalizedBiography()}
-										<span class="additional-author-name">{$author->getFullName()|escape}</span>
+					</div>
+				{/if}
+
+				{if $issue->getShowVolume() || $issue->getShowNumber() || $issue->getShowYear() || $issue->hasDescription()}
+					<div class="issue_info_text">
+						{strip}
+							{if $issue->getVolume() && $issue->getShowVolume()}
+								<span class="current-issue-volume">{translate key="plugins.themes.classic.volume-abbr"} {$issue->getVolume()|escape}</span>
+							{/if}
+							{if $issue->getNumber() && $issue->getShowNumber()}
+								<span class="current-issue-number">{translate key="plugins.themes.classic.number-abbr"} {$issue->getNumber()|escape}</span>
+							{/if}
+							{if $issue->getYear() && $issue->getShowYear()}
+								<span class="current-issue-year">{$issue->getDatePublished()|date_format:"%B"} {$issue->getYear()|escape}</span>
+							{/if}
+						{/strip}
+					</div>
+				{/if}
+
+				<div id="scrollMenu" class="responsive_issue_nav">
+
+					{* <button class="toggle-left-col__close btn-as-icon icon-general-close"></button>
+					<div class="responsive-nav-title">Issue navigation</div> *}
+
+					<!--desktop / tablet navigation -->
+					{* <ul id="largeJumptoSection" class="artTypeJumpLinks list-issue-jumplinks">
+						{foreach name=sections key=currSectionId from=$publishedArticles item=section}
+							<li class="section-jump-link parent noSubcat">
+								<a class="jumplink js-jumplink scrollTo" href="#section{$currSectionId}">{$section.title|escape}</a>
+							</li>
+						{/foreach}
+					</ul> *}
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	{* Articles *}
+	<div class="sections page-column page-column--center">
+
+		<div class="issue-browse-top issue-browse-mobile-nav js-issue-browse-mobile-nav">
+            <button class="toggle-left-col toggle-left-col__issue btn-as-link">Issue Navigation</button>
+        </div>
+
+		{* Title, authors and Links *}
+		<div class="article_summary_body">
+
+			<div class="summary_title_wrapper">
+				<h1 class="article-full-title">
+					{$publication->getLocalizedFullTitle()|escape}
+				</h1>
+			</div>
+
+			{* authors list *}
+			{if $publication->getData('authors')}
+				<div class="authors_info">
+					<ul class="entry_authors_list">
+						{strip}
+							{foreach from=$publication->getData('authors') item=author key=authorNumber}
+								<li class="entry_author_block{if $authorNumber > 4} limit-for-mobiles{elseif $authorNumber === 4} fifth-author{/if}">
+									{if $author->getOrcid()}
+										<a class="orcid-image-url" href="{$author->getOrcid()}"><img src="{$baseUrl}/{$orcidImageUrl}"></a>
 									{/if}
-									{if $author->getLocalizedAffiliation()}
-										<br/>
-										<span class="additional-author-affiliation">{$author->getLocalizedAffiliation()|escape}</span>
-									{/if}
-									{if $author->getLocalizedBiography()}
-										<br/>
-										<a class="more_button" data-toggle="modal" data-target="#modalAuthorBio-{$number}">
-											{translate key="plugins.themes.classic.biography"}
+									<span class="name_wrapper">
+										<a class="more_button" data-toggle="modal" data-target="#modalAuthorBio{$authorNumber}">
+											{$author->getFullName()|escape}
 										</a>
 										{* author's biography *}
-										<div class="modal fade" id="modalAuthorBio-{$number}" tabindex="-1" role="dialog" aria-labelledby="modalAuthorBioTitle" aria-hidden="true">
+										<div class="modal fade" id="modalAuthorBio{$authorNumber}" tabindex="-1" role="dialog" aria-labelledby="modalAuthorBioTitle" aria-hidden="true">
 											<div class="modal-dialog" role="document">
 												<div class="modal-content">
 													<div class="modal-header">
@@ -134,47 +125,58 @@
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
-													<div class="modal-body">
-														{$author->getLocalizedBiography()|strip_unsafe_html}
-													</div>
+														<div class="modal-body">
+														{if $author->getLocalizedBiography()}
+															<span class="additional-author-name">{$author->getFullName()|escape}</span>
+															<br/>
+															<span class="additional-author-affiliation">{$author->getLocalizedAffiliation()|escape}</span>
+															<br/><br/>
+															<span>{$author->getLocalizedBiography()|strip_unsafe_html}</span>
+															{else if $author->getLocalizedAffiliation() }
+															<span class="additional-author-name">{$author->getFullName()|escape}</span>
+															<br/>
+															<span class="additional-author-affiliation">{$author->getLocalizedAffiliation()|escape}</span>
+														{/if}
+														</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-primary" data-dismiss="modal">{translate key="plugins.themes.classic.close"}</button>
 													</div>
 												</div>
 											</div>
 										</div>
+									</span>
+									{if $authorNumber+1 !== $publication->getData('authors')|@count}
+										<span class="author-delimiter">, </span>
 									{/if}
-								</div>
+								</li>
 							{/foreach}
-						</div>
-					</div>
-				{/if}
-			</div>
-		</div>
-	</div>
+							{if $publication->getData('authors')|@count > 4}
+								<span class="collapse-authors" id="show-all-authors"><ion-icon name="add-circle"></ion-icon></span>
+								<span class="collapse-authors hide" id="hide-authors"><ion-icon name="remove-circle"></ion-icon></ion-icon></span>
+							{/if}
+						{/strip}
+					</ul>
+				</div>
+			{/if}
 
-	<div class="row article_main_data" id="articleMainData">
-		<div class="main_entry col-md-4" id="mainEntry" >
-
-			{* Article/Issue cover image *}
-			{if $publication->getLocalizedData('coverImage') || ($issue && $issue->getLocalizedCoverImage())}
-				<div class="article_cover_wrapper">
-					{if $publication->getLocalizedData('coverImage')}
-						{assign var="coverImage" value=$publication->getLocalizedData('coverImage')}
-						<img
-							class="img-fluid"
-							src="{$publication->getLocalizedCoverImageUrl($article->getData('contextId'))|escape}"
-							alt="{$coverImage.altText|escape|default:''}"
-						>
-					{else}
-						<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">
-							<img
-								class="img-fluid"
-								src="{$issue->getLocalizedCoverImageUrl()|escape}"
-								alt="{$issue->getLocalizedCoverImageAltText()|escape|default:''}"
-							>
-						</a>
-					{/if}
+			{* Show volumen, number, year and page *}
+			{if $issue->getShowVolume() || $issue->getShowNumber() || $issue->getShowYear() || $issue->hasDescription()}
+				<div class="issue_summary_title">
+					{strip}
+						{if $issue->getVolume() && $issue->getShowVolume()}
+							<span class="current-issue-volume">{translate key="plugins.themes.classic.volume-abbr"} {$issue->getVolume()|escape}</span>
+						{/if}
+						{if $issue->getNumber() && $issue->getShowNumber()}
+							<span class="current-issue-number">{translate key="plugins.themes.classic.number-abbr"} {$issue->getNumber()|escape}</span>
+						{/if}
+						{if $issue->getYear() && $issue->getShowYear()}
+							<span class="current-issue-year">{$issue->getDatePublished()|date_format:"%B"} {$issue->getYear()|escape}</span>
+						{/if}
+						{* Page numbers for this article *}
+						{if $article->getPages()}
+							<span class="pages">{translate key="plugins.themes.classic-child.pages-abbr"} {$article->getPages()|escape}</span>
+						{/if}
+					{/strip}
 				</div>
 			{/if}
 
@@ -202,66 +204,137 @@
 			{/foreach}
 
 			{* Publication & update dates; previous versions *}
-      {if $publication->getData('datePublished')}
-        <p>
-          {translate key="submissions.published"}
-          {* If this is the original version *}
-          {if $firstPublication->getID() === $publication->getId()}
-            {$firstPublication->getData('datePublished')|date_format:$dateFormatShort}
-          {* If this is an updated version *}
-          {else}
-            {translate key="submission.updatedOn" datePublished=$firstPublication->getData('datePublished')|date_format:$dateFormatShort dateUpdated=$publication->getData('datePublished')|date_format:$dateFormatShort}
-          {/if}
-        </p>
+			{* {if $publication->getData('datePublished')}
+				<p>
+				{translate key="submissions.published"} *}
+				{* If this is the original version *}
+				{* {if $firstPublication->getID() === $publication->getId()}
+					{$firstPublication->getData('datePublished')|date_format:$dateFormatShort} *}
+				{* If this is an updated version *}
+				{* {else}
+					{translate key="submission.updatedOn" datePublished=$firstPublication->getData('datePublished')|date_format:$dateFormatShort dateUpdated=$publication->getData('datePublished')|date_format:$dateFormatShort}
+				{/if}
+				</p> *}
 
-        {if count($article->getPublishedPublications()) > 1}
-          <h3>{translate key="submission.versions"}</h3>
-          <ul>
-            {foreach from=array_reverse($article->getPublishedPublications()) item=iPublication}
-              {capture assign="name"}{translate key="submission.versionIdentity" datePublished=$iPublication->getData('datePublished')|date_format:$dateFormatShort version=$iPublication->getData('version')}{/capture}
-              <li>
-                {if $iPublication->getId() === $publication->getId()}
-                  {$name}
-                {elseif $iPublication->getId() === $currentPublication->getId()}
-                  <a href="{url page="article" op="view" path=$article->getBestId()}">{$name}</a>
-                {else}
-                  <a href="{url page="article" op="view" path=$article->getBestId()|to_array:"version":$iPublication->getId()}">{$name}</a>
-                {/if}
-              </li>
-            {/foreach}
-          </ul>
-        {/if}
-      {/if}
+				{* {if count($article->getPublishedPublications()) > 1}
+				<h3>{translate key="submission.versions"}</h3>
+				<ul>
+					{foreach from=array_reverse($article->getPublishedPublications()) item=iPublication}
+					{capture assign="name"}{translate key="submission.versionIdentity" datePublished=$iPublication->getData('datePublished')|date_format:$dateFormatShort version=$iPublication->getData('version')}{/capture}
+					<li>
+						{if $iPublication->getId() === $publication->getId()}
+						{$name}
+						{elseif $iPublication->getId() === $currentPublication->getId()}
+						<a href="{url page="article" op="view" path=$article->getBestId()}">{$name}</a>
+						{else}
+						<a href="{url page="article" op="view" path=$article->getBestId()|to_array:"version":$iPublication->getId()}">{$name}</a>
+						{/if}
+					</li>
+					{/foreach}
+				</ul>
+				{/if}
+			{/if} *}
+
+			{* Published date *}
+			{* {if $article->getDatePublished()}
+				<div class="published_date">
+					<span class="published_date_label">
+						{translate key="submissions.published"}:
+					</span>
+					<span class="published_date_value">
+						{$article->getDatePublished()|date_format:$dateFormatLong}
+					</span>
+				</div>
+			{/if} *}
 
 			{* Keywords *}
 			{if !empty($keywords[$currentLocale])}
-			<div class="item keywords">
-				{strip}
-				<h3>
-					{translate key="article.subject"}
-				</h3>
-				<ul class="keywords_value">
-					{foreach from=$keywords item=keywordArray}
-						{foreach from=$keywordArray item=keyword key=k}
-							<li class="keyword_item{if $k>4} more-than-five{/if}">
-								<span>{$keyword|escape}</span>{if $k+1 < $keywordArray|@count}<span class="keyword-delimeter{if $k === 4} fifth-keyword-delimeter hide{/if}">,</span>{/if}
-							</li>
+				<div class="item keywords">
+					{strip}
+					<div class="keywords_label">
+						{translate key="article.subject"}:&nbsp;
+					</div>
+					<ul class="keywords_value">
+						{foreach from=$keywords item=keywordArray}
+							{foreach from=$keywordArray item=keyword key=k}
+								<li class="keyword_item{if $k>4} more-than-five{/if}">
+									<span>{$keyword|escape}</span>{if $k+1 < $keywordArray|@count}<span class="keyword-delimeter{if $k === 4} fifth-keyword-delimeter hide"{/if}">,</span>{/if}
+								</li>
+							{/foreach}
+							{if $keywordArray|@count > 5}<span class="ellipsis" id="keywords-ellipsis">...</span>
+								<a class="more_button" id="more_keywords">
+									{translate key="plugins.themes.classic.more"}
+								</a>
+								<br/>
+								<a class="more_button hide" id="less_keywords">
+									{translate key="plugins.themes.classic.less"}
+								</a>
+							{/if}
 						{/foreach}
-						{if $keywordArray|@count > 5}<span class="ellipsis" id="keywords-ellipsis">...</span>
-							<a class="more_button" id="more_keywords">
-								{translate key="plugins.themes.classic.more"}
-							</a>
-							<br/>
-							<a class="more_button hide" id="less_keywords">
-								{translate key="plugins.themes.classic.less"}
-							</a>
-						{/if}
-					{/foreach}
-				</ul>
-				{/strip}
-			</div>
+					</ul>
+					{/strip}
+				</div>
 			{/if}
 
+			{* Count downloads article *}
+			{if $primaryGalleys}
+				<div class=show-number-downloads>
+				{assign var="galleysTotalView" value=0}
+				{foreach from=$primaryGalleys item=galley name=galleyList}
+				{* {$galley->getGalleyLabel()}{$galley->getViews()} *}
+				{assign var="galleysTotalView" value=$galleysTotalView+$galley->getViews()}
+				{/foreach}
+				<p>{translate key="plugins.themes.classic-child.downloads-count"} {$galleysTotalView}</p>
+				</div>
+			{/if}
+
+			{* Article Galleys *}
+			{if $primaryGalleys}
+				<div class="item galleys">
+					{foreach from=$primaryGalleys item=galley}
+						{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley purchaseFee=$currentJournal->getSetting('purchaseArticleFee') purchaseCurrency=$currentJournal->getSetting('currency')}
+					{/foreach}
+				</div>
+			{/if}
+			{if $supplementaryGalleys}
+				<div class="item galleys">
+					{foreach from=$supplementaryGalleys item=galley}
+						{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley isSupplementary="1"}
+					{/foreach}
+				</div>
+			{/if}
+
+			{call_hook name="Templates::Article::Details"}
+
+		</div>
+
+		<div class="article_abstract_block" id="articleAbstractBlock">
+
+			{* Abstract *}
+			{if $publication->getLocalizedData('abstract')}
+				<div class="abstract">
+					<h2>{translate key="article.abstract"}</h2>
+					{$publication->getLocalizedData('abstract')|strip_unsafe_html}
+				</div>
+			{/if}
+
+			{* Article Galleys only for mobile view *}
+			{* <div class="for-mobile-view">
+				{if $primaryGalleys}
+					<div class="item galleys">
+						{foreach from=$primaryGalleys item=galley}
+							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley purchaseFee=$currentJournal->getSetting('purchaseArticleFee') purchaseCurrency=$currentJournal->getSetting('currency')}
+						{/foreach}
+					</div>
+				{/if}
+				{if $supplementaryGalleys}
+					<div class="item galleys">
+						{foreach from=$supplementaryGalleys item=galley}
+							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley isSupplementary="1"}
+						{/foreach}
+					</div>
+				{/if}
+			</div> *}
 
 			{* How to cite *}
 			{if $citation}
@@ -357,38 +430,6 @@
 				</div>
 			{/if}
 
-			{call_hook name="Templates::Article::Details"}
-
-		</div><!-- .main_entry -->
-
-		<div class="article_abstract_block col-md-8" id="articleAbstractBlock">
-
-			{* Abstract *}
-			{if $publication->getLocalizedData('abstract')}
-				<div class="abstract">
-					<h2>{translate key="article.abstract"}</h2>
-					{$publication->getLocalizedData('abstract')|strip_unsafe_html}
-				</div>
-			{/if}
-
-			{* Article Galleys only for mobile view *}
-			<div class="for-mobile-view">
-				{if $primaryGalleys}
-					<div class="item galleys">
-						{foreach from=$primaryGalleys item=galley}
-							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley purchaseFee=$currentJournal->getSetting('purchaseArticleFee') purchaseCurrency=$currentJournal->getSetting('currency')}
-						{/foreach}
-					</div>
-				{/if}
-				{if $supplementaryGalleys}
-					<div class="item galleys">
-						{foreach from=$supplementaryGalleys item=galley}
-							{include file="frontend/objects/galley_link.tpl" parent=$article galley=$galley isSupplementary="1"}
-						{/foreach}
-					</div>
-				{/if}
-			</div>
-
 			{call_hook name="Templates::Article::Main"}
 
 			{* References *}
@@ -412,6 +453,24 @@
 			{/if}
 
 		</div><!-- .article_abstract_block -->
-	</div><!-- .row -->
+
+		{* {foreach name=sections key=currSectionId from=$publishedArticles item=section}
+			<div class="section" id="section{$currSectionId}">
+				{if $section.articles}
+					{if $section.title}
+						<h3 class="section_title">
+							{$section.title|escape|upper}
+						</h3>
+					{/if}
+					<div class="section_content">
+						{foreach from=$section.articles item=article}
+							{include file="frontend/objects/article_summary.tpl"}
+						{/foreach}
+					</div>
+				{/if}
+			</div>
+		{/foreach} *}
+
+	</div><!-- .Article -->
 
 </article>

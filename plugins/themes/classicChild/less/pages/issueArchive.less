@@ -1,0 +1,115 @@
+/**
+ * @file less/pages/issueArchive.less
+ *
+ * Copyright (c) 2014-2018 Simon Fraser University
+ * Copyright (c) 2003-2018 John Willinsky
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ *
+ * @brief Stylesheet for issue archive page
+ *
+ */
+
+.page_issue_archive {
+	padding-bottom: 100px;
+}
+
+.issues_list {
+	flex-direction: row;
+	flex-flow: row wrap;
+}
+
+.issue_item {
+	width: 100%;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-bottom: 1px solid #545b62;
+
+	&:first-child {
+		border-top: 1px solid #545b62;
+	}
+
+	&:hover {
+		box-shadow: inset 0 2px 39px 0 rgba(0, 0, 0, 0.06);
+	}
+	
+	.description {
+		width: 100%;
+		color: @black;
+	}
+
+	.current-issue-volume, .current-issue-number, .current-issue-year {
+		font-size: 1rem;
+		color: @gunmetal;
+		text-transform: capitalize;
+	}
+}
+.obj_issue_summary .cover {
+    display: block;
+    margin-bottom: 1rem;
+    width: 50%;
+}
+
+// issue arhcive page for different screens
+
+@media (min-width: 1800px) {
+	.issue-archive(55%);
+}
+
+@media (min-width: 1600px) and (max-width: 1799px) {
+	.issue-archive(45%);
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+	.issue-archive(130px);
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+	.issue-archive(100px);
+	
+}
+
+@media (min-width: 768px) {
+	.issue_item {
+		width: 100%;
+		.description {
+			padding-top: 10px;
+		}
+	}
+	.obj_issue_summary {
+		margin-left: 50px;
+		margin-right: 50px;
+	}
+	.obj_issue_summary .cover {
+		float: left;
+		width: 25%;
+		height: auto;
+		margin-right: 20px;
+	}
+	
+	.issue-archive-media(3, 1, 0, 100px);
+	.issue-archive-media(3, 2, 50px, 50px);
+	.issue-archive-media(3, 3, 100px, 0);
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+	// .issue_item {
+	// 	width: 100%/2;
+	// }
+	.obj_issue_summary .cover {
+		width: 30%;
+	}
+	
+	.issue-archive-media(2, 1, 0, 30%);
+	.issue-archive-media(2, 2, 30%, 0);
+}
+
+@media (max-width: 575px) {
+	.issue_item {
+		width: 100%;
+		padding-left: 5%;
+		padding-right: 5%;
+	}
+	.issue_item:not(:last-child) {
+		margin-bottom: 70px;
+	}
+}

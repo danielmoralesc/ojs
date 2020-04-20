@@ -1,0 +1,328 @@
+/**
+ * @file less/page.less
+ *
+ * Copyright (c) 2014-2018 Simon Fraser University
+ * Copyright (c) 2003-2018 John Willinsky
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ *
+ * @brief Stylesheet that applies for all front-end theme pages
+ *
+ */
+
+// site-wide padding for pages
+html {
+	scroll-behavior: smooth;
+}
+.hide {
+	display: none;
+}
+.fixed {
+	position: fixed;
+}
+
+.container-page {
+	padding-top: 40px;
+	padding-bottom: 150px;
+}
+
+.flex_container {
+	display: flex;
+}
+
+@media (min-width: 992px) {
+	.container-page {
+		.container-padding();
+	}
+}
+
+.hidden {
+	display: none;
+}
+
+.container-page {
+	margin-top: 15px;
+}
+
+.pkp_screen_reader {
+	display: none;
+}
+
+.cmp_edit_link {
+	display: inline-block;
+	border-bottom: 3px solid @primary-colour;
+	font-size: 16px;
+	font-family: @font-family-primary;
+	color: @black;
+	margin-bottom: 20px;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+// forms
+.form-control {
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-radius: 0;
+	padding-left: 0;
+	padding-right: 0;
+
+	&:focus {
+		border-bottom: 1px solid @primary-colour;
+		box-shadow: none;
+	}
+}
+
+.form-row > .form-group {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+// pagination
+
+.search-pagination-results {
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	& span {
+		border-bottom: 2px solid @primary-colour;
+	}
+}
+
+.search-pagination-numbers {
+	display: flex;
+
+	& a, strong {
+		border: 1px solid #ced4da;
+		padding: 5px;
+		color: @black-two;
+	}
+
+	& strong {
+		background-color: @primary-colour;
+		font-weight: normal;
+		color: white;
+	}
+}
+
+// additional rules for text pages
+
+@media (min-width: 1400px) {
+
+	.container-narrow {
+		padding-left: 25%;
+		padding-right: 25%;
+	}
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+
+	.container-narrow {
+		padding-left: 25%;
+		padding-right: 25%;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+
+	.container-narrow {
+		padding-left: 17%;
+		padding-right: 17%;
+	}
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+
+	.container-narrow {
+		padding-left: 8%;
+		padding-right: 8%;
+	}
+}
+
+// modals
+
+.modal-content, .modal-header {
+	border: 0;
+	border-radius: 0;
+}
+
+.modal-header {
+	background-color: @black-two;
+	color: white;
+
+	& .close span {
+		color: white;
+	}
+}
+
+// tables
+
+.table-wrapper {
+	overflow-x: auto;
+}
+
+table, .table {
+	border-bottom: 1px solid #ddd;
+
+	th, td {
+		padding-left: 0;
+	}
+
+	p, li {
+		font-family: @font-family-secondary;
+		font-size: smaller;
+	}
+
+}
+
+// Back-links in errors and messages
+.cmp_back_link {
+	margin-top: 20px;
+}
+
+.noscroll {
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+
+
+
+//From style-customs.css
+.page_index_journal .container-page {
+	padding-bottom: 40px;
+	margin-bottom: 10px;
+  }
+  
+  .additional_content {
+	margin-top: 0px;
+  }
+  
+  .slideshow-container .mySlides {
+	  display: none;
+  }
+  .slideshow-container img {
+	  vertical-align: middle;
+	  width: 100%;
+	  max-width: 100%;
+  }
+  
+  /* Slideshow container */
+  .slideshow-container {
+	max-width: 1000px;
+	position: relative;
+	margin: auto;
+  }
+  
+  /* Caption text */
+  .slideshow-container .text {
+	  color: #696969;
+	  padding: 8px 12px;
+	  position: absolute;
+	  bottom: 0px;
+	  background-color: #EDD8BF;
+	  text-align: center;
+  }
+  
+  .slideshow-container .active {
+	background-color: #717171;
+  }
+  
+  /* Fading animation */
+  .mySlides {
+	-webkit-animation-name: fade;
+	-webkit-animation-duration: 1.5s;
+	animation-name: fade;
+	animation-duration: 1.5s;
+  }
+  
+  @-webkit-keyframes fade {
+	from {opacity: .4} 
+	to {opacity: 1}
+  }
+  
+  @keyframes fade {
+	from {opacity: .4} 
+	to {opacity: 1}
+  }
+  
+  .banner {
+	  display: none;
+	  -webkit-animation-name: fade;
+	  -webkit-animation-duration: 1s;
+	  animation-name: fade;
+	  animation-duration: 1s;
+  }
+  
+  .banner .content {
+	  cursor: pointer;
+	  margin: auto;
+  }
+  
+  #buttonBanner {
+	  position: absolute;
+	  right: 16%;
+	  margin-top: 1%;
+	  background: transparent;
+	  border: none;
+	  color: white;
+	  cursor: pointer;
+  }
+  
+  #buttonBanner svg {
+	  fill: white;
+  }
+  
+  .banner.active {
+	  display: block;
+	  position: fixed;
+	  overflow: hidden;
+	  background-color: #000000a8;
+	  top: 0;
+	  right: 0;
+	  bottom: 0;
+	  left: 0;
+	  z-index: 100;
+	  display: flex;
+	  align-items: center;
+	  text-align: center;
+  }
+  
+  .banner img {
+	  max-width: 70%;
+	  margin: 0 auto;
+	  z-index: 10;
+  }
+  
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 300px) {
+	  .slideshow-container .text {font-size: 11px}
+  
+  }
+  
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 780px) {
+	.journal-logo {
+	  width: 100%;
+	}
+	.additional_content img {
+	  width: 100%;
+	}
+	#buttonBanner {
+		right: 5%;
+	}
+	.banner img {
+		width: 90%;
+		margin: 0 auto;
+		z-index: 10;
+		max-width: 100%
+	}
+  }
+  
+  @media (min-width: 992px) {
+	#modal-on-small {
+	  display: block !important;
+	}
+  }

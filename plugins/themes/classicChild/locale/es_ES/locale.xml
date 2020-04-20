@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<locale name="es_ES" full_name="Español (España)">
+
+	<message key="plugins.themes.classic-child.name">Tema Classic Child</message>
+	<message key="plugins.themes.classic-child.description">Tema para OJS 3</message>
+	<message key="plugins.themes.classic-child.option.primaryColor.label">Color principal</message>
+	<message key="plugins.themes.classic-child.option.primaryColor.description">Cambiar color principal del tema</message>
+	<message key="plugins.themes.classic-child.menu">Menú</message>
+	<message key="plugins.themes.classic-child.issueDescription">Descripción de la publicación</message>
+	<message key="plugins.themes.classic-child.more">Más</message>
+	<message key="plugins.themes.classic-child.less">Menos</message>
+	<message key="plugins.themes.classic-child.fullIssue">Publicación completa</message>
+	<message key="plugins.themes.classic-child.tableOfContents">Tabla de Contenidos</message>
+	<message key="plugins.themes.classic-child.close">Cerrar</message>
+	<message key="plugins.themes.classic-child.biography">Biografía</message>
+	<message key="plugins.themes.classic-child.more-info">más información</message>
+	<message key="plugins.themes.classic-child.pagination">Paginación</message>
+	<message key="plugins.themes.classic-child.view-article">Ver Artículo</message>
+
+	<message key="plugins.themes.classic-child.archive.archives">Números</message>
+
+	<message key="plugins.themes.classic-child.volume-abbr">Volumen</message>
+	<message key="plugins.themes.classic-child.number-abbr">No.</message>
+	<message key="plugins.themes.classic-child.pages-abbr">pp.</message>
+	<message key="plugins.themes.classic-child.downloads-count">Descargas:</message>
+	<message key="plugins.themes.classic-child.download-pdf">Descargar PDF</message>
+	<message key="plugins.themes.classic-child.cover-image">Portada</message>
+
+	<message key="plugins.themes.classic-child.register.privacyConsent">Sí, acepto que mis datos se recopilen y almacenen de acuerdo con la Declaración de política de la publicación:</message>
+	<message key="plugins.themes.classic-child.register.privacyConsentContext"><![CDATA[The <a href="{$privacyUrl}" target="_blank">Declaración de política</a> de {$privacyContextName}.]]></message>
+
+</locale>
+

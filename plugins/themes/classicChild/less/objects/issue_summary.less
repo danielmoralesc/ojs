@@ -1,0 +1,79 @@
+/**
+ * @file less/objects/issue_summary.less
+ *
+ * Copyright (c) 2014-2018 Simon Fraser University
+ * Copyright (c) 2003-2018 John Willinsky
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ *
+ * @brief Stylesheet for issue summary (cover, description, etc.) on the archive page
+ *
+ */
+
+.archive_issue_cover {
+	max-width: 100%;
+}
+
+.current-issue-volume + .current-issue-number:before {
+	content: ", ";
+}
+
+span + .current-issue-year:before {
+	content: " (";
+}
+
+span + .current-issue-year:after {
+	content: ")";
+}
+
+.issue_summary_title span + .pages:before {
+	content: ", ";
+}
+
+.issue_title {
+	font-family: "Cardo", serif;
+	color: @green;
+	font-weight: bold;
+	line-height: 1.5;
+	font-size: 17px;
+	border-bottom: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	display: block;
+	
+	&:hover {
+		background-color: white;
+		color: @green;
+	}
+}
+
+.issue_summary_title {
+	color: @black;
+	font-size: 18px;
+	font-family: @font-family-primary;
+	line-height: 1.5;
+	display: block;
+
+	& .current-issue-year {
+		text-transform: capitalize;
+	}
+
+	// &:hover {
+	// 	text-decoration: underline;
+	// 	color: @black;
+	// }
+}
+
+.issue_summary_date {
+	color: @warm-grey;
+	font-size: small;
+	font-family: @font-family-secondary;
+	padding: 0;
+	margin: 0.5em 0 0.75em 0;
+}
+
+.issue_summary_description_text {
+	color: @warm-grey;
+	font-size: 14px;
+}
+
+

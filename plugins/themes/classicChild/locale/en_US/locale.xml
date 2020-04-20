@@ -31,10 +31,10 @@
 	<message key="plugins.themes.classic-child.number-abbr">No</message>
 	<message key="plugins.themes.classic-child.pages-abbr">pp.</message>
 	<message key="plugins.themes.classic-child.downloads-count">Downloads:</message>
-	<message key="plugins.themes.classic-child.download-pdf">Dwonload PDF</message>
+	<message key="plugins.themes.classic-child.download-pdf">Download PDF</message>
 	<message key="plugins.themes.classic-child.cover-image">Cover image</message>
 
-	<message key="plugins.themes.classic-child.archive.archives">Issues</message>
+	<message key="archive.archives">Issues</message>
 
 	<message key="plugins.themes.classic-child.register.privacyConsent">Yes, I agree to have my data collected and stored according to the journal's Policy Statement:</message>
 	<message key="plugins.themes.classic-child.register.privacyConsentContext"><![CDATA[The <a href="{$privacyUrl}" target="_blank">Policy Statement</a> of {$privacyContextName}.]]></message>

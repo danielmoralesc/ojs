@@ -1430,9 +1430,6 @@ msgstr "No Current Issue"
 msgid "current.noCurrentIssueDesc"
 msgstr "This journal has not published any issues."
 
-msgid "archive.archives"
-msgstr "Archives"
-
 msgid "archive.archivesPageNumber"
 msgstr "Archives - Page {$pageNumber}"
 

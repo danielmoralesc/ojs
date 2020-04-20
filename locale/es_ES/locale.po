@@ -1237,9 +1237,6 @@ msgstr "Ningún número actual"
 msgid "current.noCurrentIssueDesc"
 msgstr "Esta revista no ha publicado ningún número."
 
-msgid "archive.archives"
-msgstr "Archivos"
-
 msgid "archive.browse"
 msgstr "Examinar los números anteriores"
 

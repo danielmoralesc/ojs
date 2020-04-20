@@ -19,7 +19,7 @@
 	<message key="plugins.themes.classic-child.pagination">Paginación</message>
 	<message key="plugins.themes.classic-child.view-article">Ver Artículo</message>
 
-	<message key="plugins.themes.classic-child.archive.archives">Números</message>
+	<message key="archive.archives">Números</message>
 
 	<message key="plugins.themes.classic-child.volume-abbr">Volumen</message>
 	<message key="plugins.themes.classic-child.number-abbr">No.</message>
